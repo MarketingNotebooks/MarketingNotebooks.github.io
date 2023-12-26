@@ -1,0 +1,404 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="shortcut icon" type="image/png" href="favicon/favicon.ico" />
+    <title>Marketing Notebooks</title>
+    <link href="https://fonts.googleapis.com/css?family=Playfair+Display|Roboto" rel="stylesheet">
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.2/font/bootstrap-icons.min.css">
+    <link href="css/mbooksCSS.0.1.0.css" rel="stylesheet">
+    <style>
+        body {
+          overflow: hidden;
+        }
+        .container-fluid {
+          padding: 0;
+          margin: 0;
+          height: 100vh;
+          /* Full height of the viewport */
+          user-select: none;
+          /* Prevent text selection during resizing */
+          display: flex;
+          /* Use flexbox for layout */
+          flex-direction: column;
+          /* Stack children vertically */
+        }
+    
+        #top-pane {
+
+          width: 100%;
+          overflow: auto;
+          /* Prevent scrollbars */
+          min-height: 10px;
+        }
+    
+        #bottom-pane {
+
+          width: 100%;
+          overflow: auto;
+          /* Prevent scrollbars */
+          min-height: 10px;
+        }
+    
+        #resizer {
+   
+          /* Height of the resizer bar */
+          background-color:  #f8f8f8;
+          cursor: ns-resize;
+          /* Vertical resize cursor */
+          user-select: none;
+          /* Prevent text selection */
+          border: 1px solid #d2d2d2;
+        }
+    
+    
+    
+    
+        #btnbarold {
+          user-select: none;
+          position: absolute;
+          /* Position the buttons absolutely */
+          left: 10px;
+          z-index: 1;
+          bottom: -2px;
+        }
+
+      
+      </style>
+</head>
+<body>
+<!-- <div class="loader">
+    <div class="loader_inner">
+        <div class="loader_spin"></div>
+    </div>
+</div> -->
+<div class="container-fluid">
+<div id="navbar" style="margin:15px;">
+    <div class="row">
+
+        <div class="col-md-4">
+
+
+            <div class="input-group">
+                <button class="btn btn-outline-secondary" type="button" data-bs-toggle="offcanvas"
+                    data-bs-target="#offcanvasNotebooks" aria-controls="offcanvasNotebooks">
+                    <i class="bi bi-folder-symlink"></i>
+                </button>
+                <input type="text" class="form-control" placeholder="Notebook's Name" aria-label="notebook name"
+                    aria-describedby="notebook name">
+                <button class="btn btn-outline-secondary" type="button" id="button-addon2"><i
+                        class="bi bi-floppy2-fill"></i></button>
+            </div>
+
+
+
+
+        </div>
+        <div class="col-md-4" style="text-align: center;">
+            <h1>Marketing  <img src="favicon/favicon-32x32.png" alt="Notebook Logo">  Notebooks</h1>
+
+        </div>
+
+
+        <div class="col-4 ">
+            <div class="btn-group" role="group" aria-label="Basic example">
+
+
+
+                <button type="button" class="btn btn-outline-secondary" disabled><i class="bi bi-card-list"></i></button>
+                <button type="button" class="btn btn-outline-secondary" disabled><i class="bi bi-play-fill"></i></button>
+                <button type="button" class="btn btn-outline-secondary" disabled><i class="bi bi-fast-forward" ></i></button>
+
+
+
+                <button type="button" class="btn btn-outline-secondary pane_toggle" data-direction="down"><i
+                        class="bi bi-arrow-bar-down"></i></button>
+                <button type="button" class="btn btn-outline-secondary pane_toggle" data-direction="middle"><i
+                        class="bi bi-dash"></i></button>
+                <button type="button" class="btn btn-outline-secondary pane_toggle" data-direction="up"><i
+                        class="bi bi-arrow-bar-up"></i></button>
+
+
+
+            </div>
+
+
+            <div class="btn-group float-end" role="group" aria-label="Basic example">
+
+
+                
+                <button type="button" class="btn btn-outline-secondary" data-bs-toggle="modal" data-bs-target="#settingsModal"><i class="bi bi-gear"></i></button>
+                <button type="button" class="btn btn-outline-secondary"  data-bs-toggle="modal" data-bs-target="#aboutModal"><i class="bi bi-info-circle"></i></button>
+                <a type="button" class="btn btn-outline-secondary" href="https://github.com/MarketingNotebooks/MarketingNotebooks.github.io/issues"  target="_blank" rel="noopener noreferrer"><i class="bi bi-github"></i></a>
+                <a type="button" class="btn btn-outline-secondary" href="/guide/_book/index.html"  target="_blank" rel="noopener noreferrer"><i class="bi bi-book"></i></a>
+                <button type="button" class="btn btn-outline-secondary" disabled><i class="bi bi-chat"></i></button>
+
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<div id="top-pane" class="container" style="height: calc(50% - 41px);">
+
+    <div class="card" style="
+            height:95%;">
+        <div class="card-body">
+
+            <div style=" display: flex;
+            justify-content: center;
+            align-items: center;
+            height:100%; ">
+                <div style="text-align: center;   ">
+
+
+
+                    <h2>Notebook is currently empty.</h2>
+                    <br>
+                    <p><i class="bi bi-ban"></i></p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+
+</div>
+<div id="resizer" style="height: 5px;">
+
+
+</div>
+<div id="bottom-pane" class="container" style="height: calc(50% - 41px); padding:10px;">
+
+
+
+      <div class="card text-center">
+        <div class="card-header">
+
+
+
+
+
+
+
+          <ul class="nav nav-tabs card-header-tabs" id="myTab" role="tablist">
+            <li class="nav-item" role="presentation">
+              <button class="nav-link active" id="io-tab" data-bs-toggle="tab" data-bs-target="#io-tab-pane" type="button" role="tab" aria-controls="io-tab-pane" aria-selected="true">IO</button>
+            </li>
+
+            <li class="nav-item dropdown"  role="presentation">
+              <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button" aria-expanded="false">Choice Exercises</a>
+              <ul class="dropdown-menu">
+
+                <li class="nav-item" role="presentation">
+                  <button class="dropdown-item" id="cm-designer-tab" data-bs-toggle="tab" data-bs-target="#cm-designer-tab-pane" type="button" role="tab" aria-controls="cm-designer-tab-pane" aria-selected="false">Designer</button>
+                </li>
+
+                <li class="nav-item" role="presentation">
+                  <button class="dropdown-item" id="cm-models-tab" data-bs-toggle="tab" data-bs-target="#cm-models-tab-pane" type="button" role="tab" aria-controls="cm-models-tab-pane" aria-selected="false">Models</button>
+                </li>
+                <li><hr class="dropdown-divider"></li>
+                <li class="nav-item" role="presentation">
+                  <button class="dropdown-item" id="cm-simulator-tab" data-bs-toggle="tab" data-bs-target="#cm-simulator-tab-pane" type="button" role="tab" aria-controls="cm-simulator-tab-pane" aria-selected="false">Simulator</button>
+                </li>
+              </ul>
+            </li>
+
+            
+            <li class="nav-item dropdown"  role="presentation">
+              <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button" aria-expanded="false">Test</a>
+              <ul class="dropdown-menu">
+
+                <li class="nav-item" role="presentation">
+                  <button class="dropdown-item" id="test-beta-binomial-tab" data-bs-toggle="tab" data-bs-target="#test-beta-binomial-tab-pane" type="button" role="tab" aria-controls="test-beta-binomial-tab-pane" aria-selected="false">beta-binomial</button>
+                </li>
+
+              </ul>
+            </li>
+
+            
+
+          </ul>
+          
+
+
+
+
+
+        </div>
+        <div class="card-body">
+          
+
+
+
+          <div class="tab-content" id="myTabContent">
+            <div class="tab-pane fade show active" id="io-tab-pane" role="tabpanel" aria-labelledby="io-tab" tabindex="0">IO</div>
+            <div class="tab-pane fade" id="cm-designer-tab-pane" role="tabpanel" aria-labelledby="cm-designer-tab" tabindex="0">Designer</div>
+            <div class="tab-pane fade" id="cm-models-tab-pane" role="tabpanel" aria-labelledby="cm-models-tab" tabindex="0">Models</div>
+            <div class="tab-pane fade" id="cm-simulator-tab-pane" role="tabpanel" aria-labelledby="cm-simulator-tab" tabindex="0">Simulator</div>
+            <div class="tab-pane fade" id="test-beta-binomial-tab-pane" role="tabpanel" aria-labelledby="test-beta-binomial-tab" tabindex="0">beta-binomial</div>
+          </div>
+          
+
+
+        </div>
+      </div>
+   
+</div>
+</div>
+<div class="offcanvas offcanvas-start" tabindex="-1" id="offcanvasNotebooks" aria-labelledby="offcanvasNotebooksLabel">
+    <div class="offcanvas-header">
+      <h5 class="offcanvas-title" id="offcanvasNotebooksLabel">Notebooks</h5>
+      <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+    </div>
+    <div class="offcanvas-body">
+      <div>
+        Area to see, delete, and add new notebooks.
+      </div>
+
+    </div>
+  </div>
+<div class="modal fade" id="settingsModal" tabindex="-1" aria-labelledby="settingsModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5" id="settingsModalLabel">Settings</h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        ...
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary">Save changes</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="aboutModal" tabindex="-1" aria-labelledby="aboutModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h1 class="modal-title fs-5" id="aboutModalLabel">About</h1>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          ...
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-primary">Save changes</button>
+        </div>
+      </div>
+    </div>
+  </div>
+<script src="js/mbooksJS.0.1.0.js"></script>
+<script>
+    $(document).ready(function () {
+
+
+
+
+
+
+
+
+
+        let loader = $(".loader");
+        let mbooks_obj = mbooksJS($, _, loader);
+        loader.fadeOut("fast");
+
+
+
+
+
+
+        var topPane = document.getElementById('top-pane');
+        var bottomPane = document.getElementById('bottom-pane');
+        var paneSep = document.getElementById('resizer');
+        var startY, startHeightTop, startHeightBottom;
+
+
+        
+
+        function togglePane(pane) {
+            stopDrag()
+            startHeightTop = parseInt(document.defaultView.getComputedStyle(topPane).height, 10);
+            startHeightBottom = parseInt(document.defaultView.getComputedStyle(bottomPane).height, 10);
+
+            if (pane == "up") {
+                topPane.style.height = (10) + 'px';
+                bottomPane.style.height = (startHeightTop + startHeightBottom - 10) + 'px';
+            } else if (pane == "middle") {
+
+                topPane.style.height = ((startHeightTop + startHeightBottom) / 2) + 'px';
+                bottomPane.style.height = ((startHeightTop + startHeightBottom) / 2) + 'px';
+            } else if (pane == "down") {
+
+                topPane.style.height = (startHeightTop + startHeightBottom - 10) + 'px';
+                bottomPane.style.height = (10) + 'px';
+            }
+
+
+
+
+        }
+
+        $(".pane_toggle").click(function(){
+            togglePane($(this).data("direction"));
+        })
+
+
+        // Existing script ...
+        paneSep.addEventListener('mousedown', function (e) {
+            startY = e.clientY;
+            startHeightTop = parseInt(document.defaultView.getComputedStyle(topPane).height, 10);
+            startHeightBottom = parseInt(document.defaultView.getComputedStyle(bottomPane).height, 10);
+            document.documentElement.addEventListener('mousemove', doDrag, false);
+            document.documentElement.addEventListener('mouseup', stopDrag, false);
+            document.documentElement.addEventListener('mouseleave', stopDrag, false); // Listen for the mouse leaving the window
+        });
+
+        function doDrag(e) {
+            var x1 = startHeightTop + e.clientY - startY;
+            var x2 = startHeightBottom - e.clientY + startY;
+            if(x1<10){
+                startY = e.clientY;
+            startHeightTop = parseInt(document.defaultView.getComputedStyle(topPane).height, 10);
+            startHeightBottom = parseInt(document.defaultView.getComputedStyle(bottomPane).height, 10);
+                x1 = 10;
+                x2 = startHeightTop + startHeightBottom - 10;
+            }else if(x2<10){
+                startY = e.clientY;
+            startHeightTop = parseInt(document.defaultView.getComputedStyle(topPane).height, 10);
+            startHeightBottom = parseInt(document.defaultView.getComputedStyle(bottomPane).height, 10);
+                x1 = startHeightTop + startHeightBottom - 10;
+                x2 = 10;
+            }
+            topPane.style.height = x1 + 'px';
+            bottomPane.style.height = x2 + 'px';
+        }
+
+        function stopDrag() {
+            document.documentElement.removeEventListener('mousemove', doDrag, false);
+            document.documentElement.removeEventListener('mouseup', stopDrag, false);
+            document.documentElement.removeEventListener('mouseleave', stopDrag, false); // Remove the listener when not dragging
+        }
+
+
+
+
+
+
+
+
+
+    });
+</script>
+</body>
+</html>
