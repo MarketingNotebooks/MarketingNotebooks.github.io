@@ -103,9 +103,8 @@
 
 
 
-                <button type="button" class="btn btn-outline-secondary" disabled><i class="bi bi-card-list"></i></button>
+                <button type="button" class="btn btn-outline-secondary" disabled><i class="bi bi-stop-fill"></i></button>
                 <button type="button" class="btn btn-outline-secondary" disabled><i class="bi bi-play-fill"></i></button>
-                <button type="button" class="btn btn-outline-secondary" disabled><i class="bi bi-fast-forward" ></i></button>
 
 
 
@@ -129,7 +128,7 @@
                 <button type="button" class="btn btn-outline-secondary"  data-bs-toggle="modal" data-bs-target="#aboutModal"><i class="bi bi-info-circle"></i></button>
                 <a type="button" class="btn btn-outline-secondary" href="https://github.com/MarketingNotebooks/MarketingNotebooks.github.io/issues"  target="_blank" rel="noopener noreferrer"><i class="bi bi-github"></i></a>
                 <a type="button" class="btn btn-outline-secondary" href="https://MarketingNotebooks.github.io/guide/index.html"  target="_blank" rel="noopener noreferrer"><i class="bi bi-book"></i></a>
-                <button type="button" class="btn btn-outline-secondary" disabled><i class="bi bi-chat"></i></button>
+                <button id="open_chat_window" type="button" class="btn btn-outline-secondary" ><i class="bi bi-chat"></i></button>
 
             </div>
 
@@ -238,7 +237,13 @@
             <div class="custom-loader"></div>
           </div>
 
-          <p>Welcome message: TODO</p>
+
+          <h4>Welcome to Marketing Notebooks!</h4>
+          <p>
+
+           
+            We are thrilled to have you here! Our platform is dedicated to providing you with the latest and most efficient marketing insights and tools. Please be patient as we prepare your personalized R session. This may take a moment, but we promise it's worth the wait. Keep an eye on the load spinner above; once it disappears, your tools are ready to be used. Get ready to explore a world of data-driven marketing strategies and insights!
+          </p>
 
 
 
@@ -255,6 +260,45 @@
 
 </div>
 </div>
+
+
+<div id="chat_window" class=" shadow-sm card text-center" style="
+  position: absolute;
+  top: 2px;
+  width:40%;
+  right: 2px;
+  z-index: 99;
+  background-color: rgba(255, 255, 255, 1);
+">
+    <div class="card-header">
+        <button id="close_chat_window" type="button" class="btn btn-sm btn-outline-secondary float-end"><i class="bi bi-x"></i></button> Chat 
+    </div>
+    <div class="card-body">
+
+
+
+      <div class="alert alert-warning" role="alert">
+        Somepoint there may be a LLM chat bot.
+      </div>
+
+
+      <ul class="list-group">
+        
+      <li class="list-group-item" style="text-align: left;">
+        <i class="bi bi-robot"></i><br>
+         Hello! I'm here to help you. Feel free to ask me any question or tell me what you're looking for, and I'll do my best to assist you. How can I assist you today?</li>
+      </ul>
+
+
+
+    </div>
+    <div class="card-footer text-muted">
+        <div class="input-group">
+            <input type="text" class="form-control" placeholder="Ask a question" aria-label="Recipient's username" aria-describedby="button-addon2">
+            <button class="btn btn-outline-secondary" type="button" id="button-addon2"><i class="bi bi-arrow-up"></i></button>
+          </div>
+    </div>
+  </div>
 <div class="offcanvas offcanvas-start" tabindex="-1" id="offcanvasNotebooks" aria-labelledby="offcanvasNotebooksLabel">
     <div class="offcanvas-header">
       <h5 class="offcanvas-title" id="offcanvasNotebooksLabel">Notebooks</h5>

@@ -2,7 +2,7 @@ importScripts('https://cdn.jsdelivr.net/npm/lodash@4.17.21/lodash.min.js');
 
 
 function RWrapper(pass_helpers) {
-    console.log("start RWrapper");
+   
     let helpers={};
     let webR = null;
     let renv = null;
@@ -92,27 +92,7 @@ return { about: about,submit: submit };
 
 
 var helpers = {};
-
-
-// helpers["beta_binomial_single_posterior"] = `
-// function(renv, data) { 
-//     x <- jsonlite::parse_json(data)
-//         df=x$df
-//         m=as.data.frame(matrix(as.numeric(df),ncol=2, byrow = T))
-//         m = m[is.na(m[,1])==F,,drop=F]
-//         k=m[,1]
-//         n=m[,2]
-//         m[,3] <- k/n
-//         m[,4] <- qbeta(.5,k+1,(n-k)+1)
-//         m[,5] <- qbeta(.025,k+1,(n-k)+1)
-//         m[,6] <- qbeta(.975,k+1,(n-k)+1)
-//         x$output <- m
-//         return(jsonlite::toJSON(x)) 
     
-//     }
-//         `;
-
-        
 helpers["beta_binomial_single_posterior"] = `
 function(renv, data) { 
     x <- jsonlite::parse_json(data)
@@ -130,6 +110,7 @@ function(renv, data) {
             m[,6] <- qbeta(.975,k+1,(n-k)+1)
 
             x$output_obj <- m
+        
         return(
             jsonlite::toJSON(x,dataframe = c("values")) 
             )

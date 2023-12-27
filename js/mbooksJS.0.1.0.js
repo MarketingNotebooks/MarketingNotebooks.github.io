@@ -193,8 +193,12 @@ function mbooksJS($, _, loader) {
 
     
 
+var queue={};
+var current_hash = "";
+var queued_up_hashes = [];
 var event_function =null;
 var output_function ={};
+
 function clear_contents(){
     $("#tab_body").empty();
 
@@ -215,7 +219,7 @@ function simpleHash(input) {
   }
 
 
-var queue={};
+
 
 function add_to_queue(temp_obj){
     const currentDateTime = String(new Date());
@@ -226,16 +230,23 @@ function add_to_queue(temp_obj){
     var hash = simpleHash(currentDateTime+objectLength);
     temp_obj.hash=hash;
     queue[hash]=temp_obj;
+    
 
-$("#top-pane").append(`<hr><div id=${hash}> Job ${objectLength+1} - ${currentDateTime}</div>`);
-
-    run_queue(hash);
+    $("#top-pane").append(`<hr><div id=${hash}> Job ${objectLength+1} - ${currentDateTime}</div>`);
+    queued_up_hashes.push(hash);
+    run_queue();
     
 }
 
-function run_queue(hash){
-
-    myWorker.postMessage( queue[hash]);
+function run_queue(){
+    if(current_hash == ""){
+        if(queued_up_hashes.length>0){
+            var hash = queued_up_hashes[0];
+            current_hash = hash;
+            queued_up_hashes.shift();
+            myWorker.postMessage( queue[hash]);
+        }
+    }
 }
 var tools ={};
 var temp_label ="";
@@ -251,7 +262,13 @@ function tools_header(name, label){
 }
 function build_read_me() {
     clear_contents();
-    var temp = `<p>Welcome message: TODO</p>`;
+    var temp = `          <h4>Welcome to Marketing Notebooks!</h4>
+    <p>
+
+     
+      We are thrilled to have you here! Our platform is dedicated to providing you with the latest and most efficient marketing insights and tools. Please be patient as we prepare your personalized R session. This may take a moment, but we promise it's worth the wait. Keep an eye on the load spinner above; once it disappears, your tools are ready to be used. Get ready to explore a world of data-driven marketing strategies and insights!
+    </p>
+`;
     add_contents(temp);
 }
 
@@ -387,47 +404,57 @@ output_function[temp_name]= function(data){
 
 }
 
-$("#myTab").on("click",".nav-link",function(){
-var temp_name=$(this).data("name");
-if(temp_name=="read-me"){
-build_read_me();
-}else{
-console.log("tab click");
-console.log(temp_name);
-tools[temp_name]["content"]();
-}
+$("#myTab").on("click", ".nav-link", function () {
+    var temp_name = $(this).data("name");
+    if (temp_name == "read-me") {
+        build_read_me();
+    } else {
+        tools[temp_name]["content"]();
+    }
 });
 
 
 $("#tab_body").on("click", ".tool_submit", function () {
     event_function()
 });
+$("#chat_window").hide();
+$("#open_chat_window").click(function(){
 
+    $("#chat_window").fadeIn("fast");
 
+})
+$("#close_chat_window").click(function(){
+
+    $("#chat_window").fadeOut("fast");
+
+})
 const myWorker = new Worker("js/mbooksWorker.0.1.0.js");
-   
+
 
 myWorker.onmessage = (e) => {
-    
-    if(e.data.values[0]=="webR loaded"){
+
+    if (e.data.values[0] == "webR loaded") {
 
         var tool_names = Object.keys(tools);
-        for(var i=0; i<tool_names.length;i++){
-            tools_header(tools[tool_names[i]]["name"],tools[tool_names[i]]["label"]);
+        for (var i = 0; i < tool_names.length; i++) {
+            tools_header(tools[tool_names[i]]["name"], tools[tool_names[i]]["label"]);
         }
         $("#loader_div").remove();
 
-    }else{
+    } else {
 
-        console.log(e.data);
-    console.log("Message received from worker");
-    var temp_obj = JSON.parse(e.data.values[0]);
-    var job_type = temp_obj.helper;
-    output_function[job_type](temp_obj);
-
+        console.log("<");
+        current_hash = "";
+        var temp_obj = JSON.parse(e.data.values[0]);
+        var job_type = temp_obj.helper;
+        output_function[job_type](temp_obj);
+        run_queue();
     }
-    
-  };
+
+};
+
+
+
 
 
 
