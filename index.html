@@ -70,11 +70,6 @@
       </style>
 </head>
 <body>
-<!-- <div class="loader">
-    <div class="loader_inner">
-        <div class="loader_spin"></div>
-    </div>
-</div> -->
 <div class="container-fluid">
 <div id="navbar" style="margin:15px;">
     <div class="row">
@@ -133,7 +128,7 @@
                 <button type="button" class="btn btn-outline-secondary" data-bs-toggle="modal" data-bs-target="#settingsModal"><i class="bi bi-gear"></i></button>
                 <button type="button" class="btn btn-outline-secondary"  data-bs-toggle="modal" data-bs-target="#aboutModal"><i class="bi bi-info-circle"></i></button>
                 <a type="button" class="btn btn-outline-secondary" href="https://github.com/MarketingNotebooks/MarketingNotebooks.github.io/issues"  target="_blank" rel="noopener noreferrer"><i class="bi bi-github"></i></a>
-                <a type="button" class="btn btn-outline-secondary" href="/guide/_book/index.html"  target="_blank" rel="noopener noreferrer"><i class="bi bi-book"></i></a>
+                <a type="button" class="btn btn-outline-secondary" href="https://MarketingNotebooks.github.io/guide/index.html"  target="_blank" rel="noopener noreferrer"><i class="bi bi-book"></i></a>
                 <button type="button" class="btn btn-outline-secondary" disabled><i class="bi bi-chat"></i></button>
 
             </div>
@@ -144,7 +139,7 @@
 
 <div id="top-pane" class="container" style="height: calc(50% - 41px);">
 
-    <div class="card" style="
+    <div id="placeholder_top_content" class="card" style="
             height:95%;">
         <div class="card-body">
 
@@ -176,8 +171,8 @@
 
 
 
-      <div class="card text-center">
-        <div class="card-header">
+  <div class="card text-center">
+    <div class="card-header" >
 
 
 
@@ -185,12 +180,13 @@
 
 
 
-          <ul class="nav nav-tabs card-header-tabs" id="myTab" role="tablist">
-            <li class="nav-item" role="presentation">
-              <button class="nav-link active" id="io-tab" data-bs-toggle="tab" data-bs-target="#io-tab-pane" type="button" role="tab" aria-controls="io-tab-pane" aria-selected="true">IO</button>
-            </li>
+      <ul class="nav nav-tabs card-header-tabs" id="myTab" role="tablist">
+        <li class="nav-item" role="presentation">
+          <button class="nav-link active" id="read-me-tab" data-bs-toggle="tab" data-name="read-me"
+            type="button" role="tab">Read Me</button>
+        </li>
 
-            <li class="nav-item dropdown"  role="presentation">
+        <!-- <li class="nav-item dropdown"  role="presentation">
               <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button" aria-expanded="false">Choice Exercises</a>
               <ul class="dropdown-menu">
 
@@ -218,36 +214,45 @@
                 </li>
 
               </ul>
-            </li>
+            </li> -->
 
-            
 
-          </ul>
+
+      </ul>
+
+
+
+
+
+
+    </div>
+    <div class="card-body" id="tab_body">
+
+
+
+
+
           
-
-
-
-
-
-        </div>
-        <div class="card-body">
-          
-
-
-
-          <div class="tab-content" id="myTabContent">
-            <div class="tab-pane fade show active" id="io-tab-pane" role="tabpanel" aria-labelledby="io-tab" tabindex="0">IO</div>
-            <div class="tab-pane fade" id="cm-designer-tab-pane" role="tabpanel" aria-labelledby="cm-designer-tab" tabindex="0">Designer</div>
-            <div class="tab-pane fade" id="cm-models-tab-pane" role="tabpanel" aria-labelledby="cm-models-tab" tabindex="0">Models</div>
-            <div class="tab-pane fade" id="cm-simulator-tab-pane" role="tabpanel" aria-labelledby="cm-simulator-tab" tabindex="0">Simulator</div>
-            <div class="tab-pane fade" id="test-beta-binomial-tab-pane" role="tabpanel" aria-labelledby="test-beta-binomial-tab" tabindex="0">beta-binomial</div>
+          <div id="loader_div" class="loader">
+            <h3>Loading</h3>
+            <div class="custom-loader"></div>
           </div>
-          
+
+          <p>Welcome message: TODO</p>
 
 
-        </div>
-      </div>
+
+
    
+
+
+   
+
+
+
+    </div>
+  </div>
+
 </div>
 </div>
 <div class="offcanvas offcanvas-start" tabindex="-1" id="offcanvasNotebooks" aria-labelledby="offcanvasNotebooksLabel">
@@ -311,7 +316,7 @@
 
         let loader = $(".loader");
         let mbooks_obj = mbooksJS($, _, loader);
-        loader.fadeOut("fast");
+
 
 
 
