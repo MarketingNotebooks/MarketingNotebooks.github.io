@@ -82,30 +82,32 @@
                     data-bs-target="#offcanvasNotebooks" aria-controls="offcanvasNotebooks">
                     <i class="bi bi-folder-symlink"></i>
                 </button>
-                <input id="save_notebook_name" type="text" class="form-control" placeholder="Notebook's Name" aria-label="notebook name"
-                    aria-describedby="notebook name" autocomplete="off">
+                <input id="save_notebook_name" type="text" class="form-control" placeholder="Notebook's Name"
+                    aria-label="notebook name" aria-describedby="notebook name" autocomplete="off">
                 <button id="save_notebook_btn" class="btn btn-outline-secondary" type="button" id="button-addon2"><i
                         class="bi bi-floppy2-fill"></i></button>
-            </div>
 
+
+                <button type="button" class="btn btn-outline-secondary" disabled><i
+                        class="bi bi-stop-fill"></i></button>
+                <button type="button" class="btn btn-outline-secondary" disabled><i
+                        class="bi bi-play-fill"></i></button>
+
+            </div>
 
 
 
         </div>
         <div class="col-md-4" style="text-align: center;">
-            <h1>Marketing  <img src="favicon/favicon-32x32.png" alt="Notebook Logo">  Notebooks</h1>
+            <h1>Marketing <img src="favicon/favicon-32x32.png" alt="Notebook Logo"> Notebooks</h1>
 
         </div>
 
 
         <div class="col-4 ">
-            <div class="btn-group" role="group" aria-label="Basic example">
 
 
-
-                <button type="button" class="btn btn-outline-secondary" disabled><i class="bi bi-stop-fill"></i></button>
-                <button type="button" class="btn btn-outline-secondary" disabled><i class="bi bi-play-fill"></i></button>
-
+            <div class="btn-group" role="group">
 
 
                 <button type="button" class="btn btn-outline-secondary pane_toggle" data-direction="down"><i
@@ -120,22 +122,33 @@
             </div>
 
 
-            <div class="btn-group float-end" role="group" aria-label="Basic example">
+
+            <div class="btn-group float-end" role="group">
 
 
-                
-                <button type="button" class="btn btn-outline-secondary" data-bs-toggle="modal" data-bs-target="#settingsModal"><i class="bi bi-gear"></i></button>
-                <button type="button" class="btn btn-outline-secondary"  data-bs-toggle="modal" data-bs-target="#aboutModal"><i class="bi bi-info-circle"></i></button>
-                <a type="button" class="btn btn-outline-secondary" href="https://github.com/MarketingNotebooks/MarketingNotebooks.github.io/issues"  target="_blank" rel="noopener noreferrer"><i class="bi bi-github"></i></a>
-                <a type="button" class="btn btn-outline-secondary" href="https://MarketingNotebooks.github.io/guide/index.html"  target="_blank" rel="noopener noreferrer"><i class="bi bi-book"></i></a>
-                <button id="open_chat_window" type="button" class="btn btn-outline-secondary" ><i class="bi bi-chat"></i></button>
+
+                <button type="button" class="btn btn-outline-secondary" data-bs-toggle="modal"
+                    data-bs-target="#settingsModal"><i class="bi bi-gear"></i></button>
+                <a type="button" class="btn btn-outline-secondary"
+                    href="https://github.com/MarketingNotebooks/MarketingNotebooks.github.io/issues" target="_blank"
+                    rel="noopener noreferrer"><i class="bi bi-github"></i></a>
+                <a type="button" class="btn btn-outline-secondary"
+                    href="https://MarketingNotebooks.github.io/guide/index.html" target="_blank"
+                    rel="noopener noreferrer"><i class="bi bi-book"></i></a>
+                <button id="open_chat_window" type="button" class="btn btn-outline-secondary"><i
+                        class="bi bi-chat"></i></button>
 
             </div>
+
+
+
+
+
+
 
         </div>
     </div>
 </div>
-
 <div id="top-pane" class="container" style="height: calc(50% - 41px);">
 
     <div id="placeholder_top_content" class="card" style="
@@ -259,7 +272,13 @@
   </div>
 
 </div>
+
+<div style="text-align: center;">
+<p style="font-size: 70%;">Please read our <a href="privacy-policy.html">Privacy Policy</a> and our <a href="terms-and-conditions.html">Terms & Conditions</a>. </p>
 </div>
+</div>
+
+
 
 
 <div id="chat_window" class=" shadow-sm card text-center" style="
@@ -335,23 +354,6 @@
   </div>
 </div>
 
-<div class="modal fade" id="aboutModal" tabindex="-1" aria-labelledby="aboutModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h1 class="modal-title fs-5" id="aboutModalLabel">About</h1>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-        </div>
-        <div class="modal-body">
-          ...
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-          <button type="button" class="btn btn-primary">Save changes</button>
-        </div>
-      </div>
-    </div>
-  </div>
 <script src="js/mbooksJS.0.1.0.js"></script>
 <script>
     $(document).ready(function () {

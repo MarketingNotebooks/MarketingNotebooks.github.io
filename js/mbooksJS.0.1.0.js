@@ -518,7 +518,6 @@ function save_notebook_add(notebook_name) {
 
     var temp_notebook = {
         name: notebook_name,
-        settings: settings,
         queue: queue
     };
 
@@ -548,7 +547,6 @@ function save_notebook_put(notebook_name) {
 
     var temp_notebook = {
         name: notebook_name,
-        settings: settings,
         queue: queue
     };
 
@@ -611,7 +609,7 @@ function load_notebook(notebook_name) {
         $("#offcanvasNotebooks_dismiss_btn").trigger('click');
         $("#read-me-tab").trigger('click');
    
-        settings= request.result.settings;
+
         queue= request.result.queue;
 
         $("#top-pane").empty();
