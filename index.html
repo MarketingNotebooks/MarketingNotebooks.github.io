@@ -78,13 +78,13 @@
 
 
             <div class="input-group">
-                <button class="btn btn-outline-secondary" type="button" data-bs-toggle="offcanvas"
+                <button id="open_notebook_ui" class="btn btn-outline-secondary" type="button" data-bs-toggle="offcanvas"
                     data-bs-target="#offcanvasNotebooks" aria-controls="offcanvasNotebooks">
                     <i class="bi bi-folder-symlink"></i>
                 </button>
-                <input type="text" class="form-control" placeholder="Notebook's Name" aria-label="notebook name"
-                    aria-describedby="notebook name">
-                <button class="btn btn-outline-secondary" type="button" id="button-addon2"><i
+                <input id="save_notebook_name" type="text" class="form-control" placeholder="Notebook's Name" aria-label="notebook name"
+                    aria-describedby="notebook name" autocomplete="off">
+                <button id="save_notebook_btn" class="btn btn-outline-secondary" type="button" id="button-addon2"><i
                         class="bi bi-floppy2-fill"></i></button>
             </div>
 
@@ -302,11 +302,17 @@
 <div class="offcanvas offcanvas-start" tabindex="-1" id="offcanvasNotebooks" aria-labelledby="offcanvasNotebooksLabel">
     <div class="offcanvas-header">
       <h5 class="offcanvas-title" id="offcanvasNotebooksLabel">Notebooks</h5>
-      <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+      <button id="offcanvasNotebooks_dismiss_btn" type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
     </div>
     <div class="offcanvas-body">
       <div>
-        Area to see, delete, and add new notebooks.
+       
+
+        <ul id="notebook_list" class="list-group">
+
+        </ul>
+
+
       </div>
 
     </div>

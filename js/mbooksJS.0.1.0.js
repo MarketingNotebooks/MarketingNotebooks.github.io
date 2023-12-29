@@ -193,11 +193,17 @@ function mbooksJS($, _, loader) {
 
     
 
-var queue={};
+var queue={order:[]};
+var settings={};
 var current_hash = "";
 var queued_up_hashes = [];
 var event_function =null;
 var output_function ={};
+let db=null;
+
+const DB_NAME = 'user-indexeddb';
+const DB_VERSION = 1; // Use a long long for this value (don't use a float)
+const DB_STORE_NAME = "Notebook";
 
 function clear_contents(){
     $("#tab_body").empty();
@@ -224,15 +230,17 @@ function simpleHash(input) {
 function add_to_queue(temp_obj){
     const currentDateTime = String(new Date());
     const objectLength = Object.keys(queue).length;
-    if(objectLength==0){
+    if(objectLength==1){
         $("#placeholder_top_content").remove();
     }
     var hash = simpleHash(currentDateTime+objectLength);
     temp_obj.hash=hash;
+    temp_obj.date=currentDateTime;
+    temp_obj.item=objectLength;
     queue[hash]=temp_obj;
-    
+    queue.order.push(hash);
 
-    $("#top-pane").append(`<hr><div id=${hash}> Job ${objectLength+1} - ${currentDateTime}</div>`);
+    $("#top-pane").append(`<hr><div id=${temp_obj.hash}> Job ${temp_obj.item} - ${temp_obj.date}</div>`);
     queued_up_hashes.push(hash);
     run_queue();
     
@@ -247,6 +255,47 @@ function run_queue(){
             myWorker.postMessage( queue[hash]);
         }
     }
+}
+
+function load_queue_inner(temp_obj){
+
+    var job_type = temp_obj.helper;
+    $("#top-pane").append(`<hr><div id=${temp_obj.hash}> Job ${temp_obj.item} - ${temp_obj.date}</div>`);
+    output_function[job_type](temp_obj);
+    
+}
+function load_queue(queue){
+
+    if(queue.order.length==0){
+        $("#top-pane").html(`
+        
+        <div id="placeholder_top_content" class="card" style="
+        height:95%;">
+    <div class="card-body">
+
+        <div style=" display: flex;
+        justify-content: center;
+        align-items: center;
+        height:100%; ">
+            <div style="text-align: center;   ">
+
+
+
+                <h2>Notebook is currently empty.</h2>
+                <br>
+                <p><i class="bi bi-ban"></i></p>
+            </div>
+        </div>
+    </div>
+</div>
+        `);
+    }else{
+        for(var i=0; i<queue.order.length;i++){
+
+            load_queue_inner(queue[queue.order[i]]);
+        }
+    }
+
 }
 var tools ={};
 var temp_label ="";
@@ -328,14 +377,15 @@ tools[temp_name] = {
 
     }
 }
-output_function[temp_name]= function(data){
+output_function[temp_name]= function(temp_obj){
     console.log("output_function");
-    console.log(data);
-    var hash=data.hash;
+    console.log(temp_obj);
+    var hash=temp_obj.hash;
     $("#"+hash).append(`<br><br><div id="spreadsheet-${hash}"></div>`);
 
 
-    var data = data.output_obj;
+    var data = temp_obj.output_obj;
+    console.log(data);
 
 
 
@@ -428,6 +478,190 @@ $("#close_chat_window").click(function(){
     $("#chat_window").fadeOut("fast");
 
 })
+
+
+
+function add_db_events() {
+    db.onerror = (event) => {
+        // Generic error handler for all errors targeted at this database's
+        // requests!
+        console.error(`Database error: ${event.target.errorCode}`);
+    };
+}
+
+function open_db(call_back_fun) {
+    console.log("Opened0");
+    if (db === null) {
+        console.log("Opened1");
+        const request = indexedDB.open(DB_NAME, DB_VERSION);
+        request.onerror = (event) => {
+            console.error("Why didn't you allow my web app to use IndexedDB?!");
+        };
+        request.onsuccess = (event) => {
+            console.log("Opened2");
+            db = event.target.result;
+            add_db_events();
+            call_back_fun();
+        };
+        request.onupgradeneeded = function (evt) {
+            console.log("openDb.onupgradeneeded");
+            var store = evt.currentTarget.result.createObjectStore(
+                DB_STORE_NAME, { keyPath: 'name' });
+
+        };
+    } else {
+        call_back_fun();
+    }
+}
+
+function save_notebook_add(notebook_name) {
+
+    var temp_notebook = {
+        name: notebook_name,
+        settings: settings,
+        queue: queue
+    };
+
+    const transaction = db.transaction([DB_STORE_NAME], "readwrite");
+
+    transaction.oncomplete = (event) => {
+        console.log("All done 0!");
+    };
+
+    transaction.onerror = (event) => {
+        console.log("Save Error!");
+        // Don't forget to handle errors!
+    };
+
+    const objectStore = transaction.objectStore(DB_STORE_NAME);
+
+    const request = objectStore.add(temp_notebook);
+    request.onsuccess = (event) => {
+        console.log("All done 1!");
+        // event.target.result === customer.ssn;
+    };
+
+
+}
+
+function save_notebook_put(notebook_name) {
+
+    var temp_notebook = {
+        name: notebook_name,
+        settings: settings,
+        queue: queue
+    };
+
+    const objectStore = db.transaction([DB_STORE_NAME], "readwrite")
+        .objectStore(DB_STORE_NAME);
+
+    // Put this updated object back into the database.
+    const requestUpdate = objectStore.put(temp_notebook);
+    requestUpdate.onerror = (event) => {
+        // Do something with the error
+        console.log("save_notebook_put error");
+    };
+    requestUpdate.onsuccess = (event) => {
+        // Success - the data is updated!
+        console.log("save_notebook_put success");
+    };
+
+
+
+}
+
+
+function save_notebook() {
+    var notebook_name = $("#save_notebook_name").val();
+    if (notebook_name !== "") {
+
+
+        const objectStore = db.transaction(DB_STORE_NAME).objectStore(DB_STORE_NAME);
+        objectStore.getAllKeys().onsuccess = (event) => {
+            var all_names = event.target.result;
+            if (all_names.includes(notebook_name)) {
+                save_notebook_put(notebook_name);
+            } else {
+                save_notebook_add(notebook_name);
+
+            }
+
+        };
+    }
+}
+
+
+
+
+
+function load_notebook(notebook_name) {
+
+
+
+    const transaction = db.transaction([DB_STORE_NAME]);
+    const objectStore = transaction.objectStore(DB_STORE_NAME);
+    const request = objectStore.get(notebook_name);
+    request.onerror = (event) => {
+        // Handle errors!
+    };
+    request.onsuccess = (event) => {
+        // Do something with the request.result!
+        console.log(request.result);
+        $("#save_notebook_name").val(notebook_name);
+        $("#offcanvasNotebooks_dismiss_btn").trigger('click');
+        $("#read-me-tab").trigger('click');
+   
+        settings= request.result.settings;
+        queue= request.result.queue;
+
+        $("#top-pane").empty();
+        load_queue(queue);
+    };
+
+
+}
+
+function open_notebook_ui_fun() {
+    console.log("open_notebook_ui_fun");
+
+    const objectStore = db.transaction(DB_STORE_NAME).objectStore(DB_STORE_NAME);
+    objectStore.getAllKeys().onsuccess = (event) => {
+
+        $("#notebook_list").empty();
+
+
+        event.target.result.forEach(function (item) {
+            $("#notebook_list").append(` 
+        <li class="list-group-item">
+        <a class="load_notebook" href="#">${item}</a>
+        </li>
+        `);
+        });
+
+
+    };
+
+}
+
+$("#save_notebook_btn").click(function () {
+    open_db(save_notebook);
+
+
+
+});
+
+$("#open_notebook_ui").click(function () {
+
+    open_db(open_notebook_ui_fun);
+});
+
+$("#notebook_list").on("click", ".load_notebook", function () {
+    var notebook_name = $(this).html();
+    load_notebook(notebook_name);
+   
+
+
+})
 const myWorker = new Worker("js/mbooksWorker.0.1.0.js");
 
 
@@ -447,6 +681,7 @@ myWorker.onmessage = (e) => {
         current_hash = "";
         var temp_obj = JSON.parse(e.data.values[0]);
         var job_type = temp_obj.helper;
+        queue[temp_obj.hash] = temp_obj;
         output_function[job_type](temp_obj);
         run_queue();
     }
