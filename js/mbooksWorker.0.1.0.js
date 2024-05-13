@@ -53,7 +53,7 @@ function about() {
 
 
 function load_tools_worker(pass_helpers) {
-  import('https://webr.r-wasm.org/latest/webr.mjs').then(
+  import('/js/webr.mjs').then(
       async ({ WebR }) => {
           webR = new WebR();
           await webR.init();
