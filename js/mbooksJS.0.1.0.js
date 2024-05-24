@@ -454,6 +454,161 @@ output_function[temp_name]= function(temp_obj){
 
 }
 
+
+temp_name = "nps_testing_function";
+temp_label = "NPS Confidence";
+
+tools[temp_name] = {
+    "name": temp_name, "label": temp_label, "content": function () {
+        console.log("build nps_testing_function");
+        clear_contents();
+        var temp = ` 
+
+        <div class="input-group mb-3">
+        <span for="random_seed_setting" class="input-group-text">Random Seed</span>
+        <input type="number" class="form-control" id="random_seed_setting" value="12345">
+      </div>
+      <div class="input-group mb-3">
+      <span for="sample_size_setting" class="input-group-text">Sample Size</span>
+      <input type="number" class="form-control" id="sample_size_setting" value="10000">
+    </div>
+
+
+    <div id="spreadsheet"></div>
+    <div class="d-grid gap-2 m-5 ">
+        <button class="btn btn-outline-secondary tool_submit" type="button">Submit</button>
+
+    </div>`;
+        add_contents(temp);
+
+
+        var data = [
+            ["100", "10","30"],
+            ["", "", "",],
+            ["", "", "",],
+            ["", "", "",]
+        ];
+
+
+
+        let myTable = jspreadsheet(document.getElementById('spreadsheet'), {
+
+            data: data,
+
+            columns: [
+                {
+                    type: 'text',
+                    title: 'promoters',
+                    width: 90
+                },
+
+                {
+                    type: 'text',
+                    title: 'passives',
+                    width: 90
+                },
+
+                {
+                    type: 'text',
+                    title: 'detractors',
+                    width: 90
+                }
+            ]
+        });
+
+        event_function = function(){
+            let df = myTable.getData();
+            let random_seed = $("#random_seed_setting").val();
+            let sample_size = $("#sample_size_setting").val();
+            //console.log(df);
+
+            add_to_queue({helper:"nps_testing_function",df:df,random_seed:random_seed,sample_size:sample_size});
+        }
+
+    
+
+    }
+}
+output_function[temp_name]= function(temp_obj){
+    console.log("output_function");
+    console.log(temp_obj);
+    var hash=temp_obj.hash;
+    $("#"+hash).append(`<br><br>
+    Random seed: ${temp_obj.random_seed}<br>
+    Sample size: ${temp_obj.sample_size}<br>
+    
+    <div id="spreadsheet-${hash}"></div>`);
+
+    console.log(temp_obj);
+
+    var data = temp_obj.output_obj;
+    console.log(data);
+
+
+
+    let myTable = jspreadsheet(document.getElementById(`spreadsheet-${hash}`), {
+
+        data: data,
+
+        columns: [
+            {
+                type: 'text',
+                title: 'promoters',
+                width: 90
+            },
+
+            {
+                type: 'text',
+                title: 'passives',
+                width: 90
+            },
+
+            {
+                type: 'text',
+                title: 'detractors',
+                width: 90
+            },
+            {
+
+                type: 'text',
+
+                title: 'raw',
+
+                width: 90
+
+            },
+            {
+
+                type: 'text',
+
+                title: 'median',
+
+                width: 90
+
+            }, {
+
+                type: 'text',
+
+                title: '2.5%',
+
+                width: 90
+
+            },
+            {
+
+                type: 'text',
+
+                title: '97.5%',
+
+                width: 90
+
+            },
+        ]
+    });
+
+
+}
+
 $("#myTab").on("click", ".nav-link", function () {
     var temp_name = $(this).data("name");
     if (temp_name == "read-me") {
