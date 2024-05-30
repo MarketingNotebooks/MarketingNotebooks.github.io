@@ -140,6 +140,147 @@ function(renv, data) {
 
   
       
+helpers["nps_2g_testing_function"] = `
+x <- function(renv, data) { 
+  
+  
+    rdirichlet <- function (n, alpha) 
+    {
+      l <- length(alpha)
+      x <- matrix(rgamma(l * n, alpha), ncol = l, byrow = TRUE)
+      sm <- x %*% rep(1, l)
+      x/as.vector(sm)
+    }
+    
+    assert <- function(logic_val, stop_message) {
+      if (length(logic_val) != 1) {
+        stop(stop_message, call. = F)
+      }
+      if (is.logical(logic_val) == F) {
+        stop(stop_message, call. = F)
+      }
+      if (is.na(logic_val) == T) {
+        stop(stop_message, call. = F)
+      }
+      
+      if (logic_val == F) {
+        stop(stop_message, call. = F)
+      }
+    }
+    
+    util_nps_compare <- function(promoters, passives, detractors,prior = 1, n_samples = 10000, probs = c(0.025, 0.975)) {
+      assert(length(promoters) == length(passives), "Lengths must be the same")
+      assert(length(promoters) == length(detractors), "Lengths must be the same")
+      
+      my_out <- matrix(NA, nrow=length(promoters),ncol=length(promoters))
+      
+      
+      
+      for (i in 1:(length(promoters)-1)) {
+        
+        for (j in (i+1):length(promoters)) {
+          
+          x <- util_nps_compare_inner(promoters = promoters[c(i,j)], 
+                                                passives = passives[c(i,j)], 
+                                                detractors = detractors[c(i,j)], 
+                                                prior, n_samples, probs)
+          my_out[i,j] <- x[1]
+          my_out[j,i] <- x[2]
+          
+        }
+        
+      }
+      
+      out_df <- as.data.frame(my_out)
+      out_df$promoters <- promoters
+      out_df$passives <- passives
+      out_df$detractors <- detractors
+      out_df$row <- 1:nrow(out_df)
+      out_df <- out_df[c(c("promoters", "passives", "detractors","row"), setdiff(colnames(out_df), c("promoters", "passives", "detractors","row")))]
+      return(out_df)
+    }
+    
+    
+    util_nps_compare_inner <- function(promoters, passives, detractors, prior, n_samples, probs) {
+      survey_responses <- c(promoters[1], passives[1], detractors[1])
+      alpha <- survey_responses + prior
+      samples <- u__sample_dirichlet_multinomial(n_samples, alpha, sum(survey_responses))
+      nps_samples1 <- apply(samples, 1, function(row) u__calculate_nps(setNames(row, c("promoters", "passives", "detractors"))))
+      
+      
+      survey_responses <- c(promoters[2], passives[2], detractors[2])
+      alpha <- survey_responses + prior
+      samples <- u__sample_dirichlet_multinomial(n_samples, alpha, sum(survey_responses))
+      nps_samples2 <- apply(samples, 1, function(row) u__calculate_nps(setNames(row, c("promoters", "passives", "detractors"))))
+      
+      
+      return(c(mean(nps_samples1>=nps_samples2), mean(nps_samples2>=nps_samples1)))
+    }
+    u__calculate_nps <- function(counts) {
+      total <- sum(counts)
+      promoters <- counts["promoters"] / total
+      detractors <- counts["detractors"] / total
+      nps <- (promoters - detractors) * 100
+      return(nps)
+    }
+    
+    u__sample_dirichlet_multinomial <- function(n, alpha, size) {
+      # Sample from Dirichlet distribution
+      p <- rdirichlet(n, alpha)
+      
+      # Initialize the result matrix
+      samples <- matrix(0, nrow = n, ncol = length(alpha))
+      
+      # Sample from Multinomial distribution for each row of p
+      for (i in 1:n) {
+        samples[i, ] <- stats::rmultinom(1, size, p[i, ])
+      }
+      
+      return(samples)
+    }
+    
+    
+    
+    
+    
+    
+    
+    x <- jsonlite::parse_json(data)
+    
+    
+    df=x$df
+    random_seed <- as.integer(x$random_seed)
+    sample_size <- as.integer(x$sample_size)
+    
+    m=as.data.frame(matrix(as.numeric(unlist(df)),ncol=3, byrow = T))
+    m = m[is.na(m[,1])==F,,drop=F]
+    
+    
+    
+    
+    promoters=m[,1]
+    passives=m[,2]
+    detractors=m[,3]
+    
+    
+    new_seed <- sample.int(.Machine$integer.max, 1)
+    set.seed(random_seed)
+    m <- util_nps_compare(promoters, passives, detractors,prior = 1, n_samples = sample_size, probs = c(0.025, 0.975)) 
+    
+    set.seed(new_seed)
+    
+    x$output_obj <- m
+    
+    return(
+      jsonlite::toJSON(x,dataframe = c("values")) 
+    )
+    
+  }
+        `;
+
+
+  
+      
 helpers["nps_testing_function"] = `
 function(renv, data) { 
 
